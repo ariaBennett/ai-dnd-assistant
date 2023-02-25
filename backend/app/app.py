@@ -133,6 +133,6 @@ def completions() -> dict:
     attributes = get_code(prompt)
     print("ATTRIBUTES", attributes)
     image_data = ""
-    # image_data = get_image(prompt)
+    image_data = get_image(prompt)
 
     return {"attributes": attributes, "image": image_data}
