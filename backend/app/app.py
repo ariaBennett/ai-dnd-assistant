@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from flask_restful import Api
 
-from .config import ART_STYLE, IMAGE_CONFIG, TEXT_CONFIG, MONSTER_SCHEMA
+from .config import ART_STYLE, IMAGE_CONFIG, TEXT_CONFIG, MONSTER_SCHEMA, CODE_CONFIG
 
 load_dotenv(".local.env", verbose=True)
 
@@ -30,13 +30,13 @@ def parse_params(params: dict) -> dict:
     number_players = params.get("numberPlayers")
 
     if not description:
-        return jsonify({"error": "Missing param 'description'"}), 400
+        return {"error": "Missing param 'description'"}
     if not location:
-        return jsonify({"error": "Missing param 'location'"}), 400
+        return {"error": "Missing param 'location'"}
     if not level:
-        return jsonify({"error": "Missing param 'level'"}), 400
+        return {"error": "Missing param 'level'"}
     if not number_players:
-        return jsonify({"error": "Missing param 'number_players'"}), 400
+        return {"error": "Missing param 'number_players'"}
 
     return dict(
         description=description,
@@ -50,7 +50,8 @@ def create_prompt(params: dict) -> str:
     """
     Convert user-based inputs to a single text prompt for OpenAI.
     """
-    s = "s" if params["number_players"] > 1 else ""
+    players = params["number_players"]
+    s = "s" if players > 1 else ""
 
     return (
         f'Monster for a D&D game based on description - {params["description"]}. The monsters lives at location {params["location"] }.'
@@ -66,16 +67,38 @@ def create_image_prompt(value: str) -> str:
     return f"{ART_STYLE}. {value}"
 
 
+def create_code_prompt(prompt):
+    return f"""{prompt}.
+
+Using JSON response data with this format:
+```
+{MONSTER_SCHEMA}
+```
+"""
+
+
 def get_text(prompt):
     openai_text_params = TEXT_CONFIG.copy()
     openai_text_params["prompt"] = prompt
 
     text_result = openai.Completion.create(**openai_text_params)
     choice = text_result.choices[0]
+
     return choice.text.strip()
 
 
-def get_image_data(prompt):
+def get_code(prompt):
+    openai_text_params = CODE_CONFIG.copy()
+    code_prompt = create_code_prompt(prompt)
+    openai_text_params["prompt"] = code_prompt
+
+    text_result = openai.Completion.create(**openai_text_params)
+    choice = text_result.choices[0]
+
+    return choice.text.strip()
+
+
+def get_image(prompt):
     openai_image_params = IMAGE_CONFIG.copy()
     image_prompt = create_image_prompt(prompt)
     print("IMAGE PROMPT", image_prompt)
@@ -83,6 +106,7 @@ def get_image_data(prompt):
 
     image_result = openai.Image.create(**openai_image_params)
     item = image_result["data"][0]
+
     return item["b64_json"]
 
 
@@ -92,6 +116,10 @@ def completions() -> dict:
     Monster creation endpoint.
     """
     params = parse_params(request.json)
+    if params.get("error"):
+        return jsonify(params), 400
+
+    print("PARAMS", params)
 
     prompt = create_prompt(params)
     print("PROMPT", prompt)
@@ -99,6 +127,6 @@ def completions() -> dict:
     attributes = ""
     image_data = ""
 
-    image_data = get_image_data(prompt)
+    image_data = get_image(prompt)
 
     return {"attributes": attributes, "image": image_data}
