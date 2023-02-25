@@ -4,6 +4,17 @@ import { useState } from "react";
 import axios from "axios";
 import styled from 'styled-components';
 
+const InputArea = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  >div {
+    width: 100%;
+
+  }
+`;
+
 const MonsterStatBlock = styled.div`
   background: url(./img/stat-block-top-texture.png),url(./img/paper-texture.png);
   background-size: 100% auto;
@@ -176,6 +187,7 @@ const Index = () => {
 
   return (
     <>
+      <InputArea>
       <div>
         <Input 
           underlined 
@@ -210,6 +222,7 @@ const Index = () => {
       <Button color="primary" auto ghost onClick={generateMonsterData}>
           Generate Monster
       </Button>
+      </InputArea>
       
       { monsterImage && <Image
         src={monsterImage}
