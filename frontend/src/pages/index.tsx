@@ -1,30 +1,56 @@
 import { Button, Col, Grid, Input, Row } from "@nextui-org/react";
+import { Image } from "@nextui-org/react";
 import { useState } from "react";
 import axios from "axios";
 import styled from 'styled-components';
 
 const MonsterStatBlock = styled.div`
+  background: url(./img/stat-block-top-texture.png),url(./img/paper-texture.png);
+  background-size: 100% auto;
+  background-position: top center;
+  background-repeat: no-repeat,repeat;
+
+  &:before,
   &:after {
-    content: " 🦄";
+    content: "";
+    display: block;
+    background: url(./img/stat-bar-book.png) center;
+    background-size: 100% 100%;
+    height: 6px;
+    position: absolute;
+    left: 0;
+    right: 0;
   }
 `;
 
 const MonsterStatHeader = styled.div`
-  &:after {
-    content: " 🦄";
+  padding: 10px 0;
+  h1,
+  h2 {
+    margin: 8px 0;
   }
 `;
 
 const MonsterStatSection = styled.div`
+  >div {
+    margin: 8px 0;
+  }
   &:after {
-    content: " 🦄";
+    content: "";
+    display: block;
+    background: url(./img/stat-block-header-bar.svg) center;
+    height: 10px;
+    background-size: 90% auto;
+    background-position: top left;
+    background-repeat: no-repeat,repeat;
   }
 `;
 
 const MonsterStatActionsTitle = styled.div`
-  &:after {
-    content: " 🦄";
-  }
+  font-size: 24px;
+  color: #822000;
+  border-bottom: 1px solid #822000;
+  padding-bottom: 6px;
 `;
 
 type MonsterRequestData = {
@@ -117,18 +143,25 @@ const presetMonsterData = {
   ]
 };
 
+const presetMonsterImage = "https://openailabsprodscus.blob.core.windows.net/private/user-KVTlsWh64b9mMTVu9WuHYfvk/generations/generation-6FjJDdbmCzS77KxSyFEW36IU/image.webp?st=2023-02-25T15%3A49%3A19Z&se=2023-02-25T17%3A47%3A19Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/webp&skoid=15f0b47b-a152-4599-9e98-9cb4a58269f8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-02-25T13%3A42%3A23Z&ske=2023-03-04T13%3A42%3A23Z&sks=b&skv=2021-08-06&sig=QAAFiAC4XvzWMelmoufBx87a7Ow3cGqth%2B6IEOy37y0%3D";
+
 const emptyOrStringArray = (array: Array<string>): boolean => !!array.length && !!array[0];
 
 const titleDescriptionBlock = (title: string, description: string) => title && description && <div><strong>{title}</strong> {description}</div>;
 
 const Index = () => {
-  const [monsterData, setMonsterData] = useState(presetMonsterData);
+  const [monsterData, setMonsterData] = useState();
+  const [monsterImage, setMonsterImage] = useState();
 
   const getMonsterData = (monsterRequestData: MonsterRequestData) => {
     axios.post('http://127.0.0.1:5000/monster', monsterRequestData).then(resp => {
       console.log(resp.data)
+      setMonsterData(presetMonsterData);
+      setMonsterImage(presetMonsterImage);
     }).catch((error) => {
       console.log(error)
+      setMonsterData(presetMonsterData);
+      setMonsterImage(presetMonsterImage);
     })
   }
 
@@ -175,9 +208,16 @@ const Index = () => {
       </div>
 
       <Button color="primary" auto ghost onClick={generateMonsterData}>
-          Primary
+          Generate Monster
       </Button>
+      
+      { monsterImage && <Image
+        src={monsterImage}
+        alt="Default Image"
+        objectFit="cover"
+      /> }
 
+        { monsterData && 
       <MonsterStatBlock>
         <MonsterStatHeader>
           <div><h1>{monsterData.identity.personalName}</h1><h2>({monsterData.identity.creatureName})</h2></div>
@@ -245,6 +285,7 @@ const Index = () => {
           {monsterData.actions.map(action => titleDescriptionBlock(action.name,action.description))}
         </MonsterStatSection>
       </MonsterStatBlock>
+}
     </>
   );
 }
