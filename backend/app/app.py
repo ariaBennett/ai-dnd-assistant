@@ -68,6 +68,9 @@ def completions() -> dict:
     """
     Monster creation endpoint.
     """
+    attributes = ""
+    image_data = ""
+
     params = parse_params(request.json)
 
     prompt = create_prompt(params)
@@ -89,6 +92,6 @@ def completions() -> dict:
 
     image_result = openai.Image.create(**openai_image_params)
     item = image_result["data"][0]
-    url = item["url"]
+    image_data = item["b64_json"]
 
-    return {"attributes": attributes, "image_url": url}
+    return {"attributes": attributes, "image": image_data}
