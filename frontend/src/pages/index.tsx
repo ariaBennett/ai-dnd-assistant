@@ -230,13 +230,13 @@ const Index = () => {
         objectFit="cover"
       /> }
       
-      { monsterImage && <Image
+      { !isLoading && monsterImage && <Image
         src={monsterImage}
         alt="Default Image"
         objectFit="cover"
       /> }
 
-        { monsterData && 
+        { !isLoading && monsterData && 
       <MonsterStatBlock>
         <MonsterStatHeader>
           <div><h1>{monsterData.identity.personalName}</h1><h2>({monsterData.identity.creatureName})</h2></div>
