@@ -70,14 +70,13 @@ def create_image_prompt(value: str) -> str:
 
 
 def create_code_prompt(prompt):
-    # Use this for debugging to ignore all frontend data.
-    # prompt = "D&D cyclops monster"
-
     return f"""{prompt}
 
-Ignore making a request and no JavaScript or other code. Just return the monster's attributes as JSON using this schema:
+Return the monster's attributes as YAML using this YAML schema:
 
+```json
 {MONSTER_SCHEMA}
+```
 """
 
 
@@ -129,10 +128,9 @@ def completions() -> dict:
     prompt = create_prompt(params)
     print("PROMPT", prompt)
 
-    attributes = ""
-    attributes = get_code(prompt)
-    print("ATTRIBUTES", attributes)
-    image_data = ""
+    attributes = get_text(prompt)
+    # attributes = get_code(prompt)
+
     image_data = get_image(prompt)
 
     return {"attributes": attributes, "image": image_data}
