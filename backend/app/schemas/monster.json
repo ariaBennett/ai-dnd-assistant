@@ -1,0 +1,47 @@
+{
+  "identity": {
+    "name": "",
+    "kind": "",
+    "alignment": ""
+  },
+  "attributes": {
+    "armorClass": "",
+    "armorClassType": "",
+    "maxHitPoints": "",
+    "currentHitPoints": "",
+    "speed": ""
+  },
+  "statBlock": {
+    "STR": "",
+    "DEX": "",
+    "CON": "",
+    "INT": "",
+    "WIS": "",
+    "CHA": ""
+  },
+  "details": {
+    "skills": [
+      ""
+    ],
+    "senses": [
+      ""
+    ],
+    "languages": [
+      ""
+    ],
+    "challenge": "",
+    "proficiencyBonus": ""
+  },
+  "passiveTraits": [
+    {
+      "name": "",
+      "description": ""
+    }
+  ],
+  "actions": [
+    {
+      "name": "",
+      "description": ""
+    }
+  ]
+}
