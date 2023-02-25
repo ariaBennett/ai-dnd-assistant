@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from flask_restful import Api
 
-from .config import ART_STYLE, IMAGE_CONFIG, TEXT_CONFIG
+from .config import ART_STYLE, IMAGE_CONFIG, TEXT_CONFIG, MONSTER_SCHEMA
 
 load_dotenv(".local.env", verbose=True)
 
@@ -60,31 +60,22 @@ def create_prompt(params: dict) -> str:
 
 
 def create_image_prompt(value: str) -> str:
+    """
+    Prepare text prompt for AI image generation.
+    """
     return f"{ART_STYLE}. {value}"
 
 
-@app.route("/monster", methods=["POST"])
-def completions() -> dict:
-    """
-    Monster creation endpoint.
-    """
-    attributes = ""
-    image_data = ""
-
-    params = parse_params(request.json)
-
-    prompt = create_prompt(params)
-    print("PROMPT", prompt)
-
-    # TEXT
+def get_text(prompt):
     openai_text_params = TEXT_CONFIG.copy()
     openai_text_params["prompt"] = prompt
 
     text_result = openai.Completion.create(**openai_text_params)
     choice = text_result.choices[0]
-    attributes = choice.text.strip()
+    return choice.text.strip()
 
-    # IMAGE
+
+def get_image_data(prompt):
     openai_image_params = IMAGE_CONFIG.copy()
     image_prompt = create_image_prompt(prompt)
     print("IMAGE PROMPT", image_prompt)
@@ -92,6 +83,22 @@ def completions() -> dict:
 
     image_result = openai.Image.create(**openai_image_params)
     item = image_result["data"][0]
-    image_data = item["b64_json"]
+    return item["b64_json"]
+
+
+@app.route("/monster", methods=["POST"])
+def completions() -> dict:
+    """
+    Monster creation endpoint.
+    """
+    params = parse_params(request.json)
+
+    prompt = create_prompt(params)
+    print("PROMPT", prompt)
+
+    attributes = ""
+    image_data = ""
+
+    image_data = get_image_data(prompt)
 
     return {"attributes": attributes, "image": image_data}
