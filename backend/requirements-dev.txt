@@ -1,0 +1,10 @@
+black~=22.1
+isort~=5.10
+
+flake8~=4.0
+pylint~=2.12
+pylint-exit~=1.2
+
+mypy~=0.940
+
+pytest~=7.0
