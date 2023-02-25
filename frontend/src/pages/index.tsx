@@ -15,7 +15,7 @@ const Index = () => {
   const [monsterData, setMonsterData] = useState();
 
   const getMonsterData = (monsterRequestData: MonsterRequestData) => {
-    axios.post('http://127.0.0.1:5000/monster').then(resp => {
+    axios.post('http://127.0.0.1:5000/monster', monsterRequestData).then(resp => {
       console.log(resp.data)
     }).catch((error) => {
       console.log(error)

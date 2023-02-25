@@ -42,4 +42,4 @@ fix: fmt lint
 
 
 run:
-	flask --app app/app --debug run
+	flask --app app/app --debug run --host=0.0.0.0
