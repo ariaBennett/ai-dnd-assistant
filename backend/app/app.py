@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from flask_restful import Api
 
-from .config import ART_STYLE, IMAGE_CONFIG, TEXT_CONFIG, MONSTER_SCHEMA, CODE_CONFIG
+from .config import ART_STYLE, CODE_CONFIG, IMAGE_CONFIG, MONSTER_SCHEMA, TEXT_CONFIG
 
 load_dotenv(".local.env", verbose=True)
 
