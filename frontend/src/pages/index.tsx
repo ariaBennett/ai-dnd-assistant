@@ -1,5 +1,6 @@
 import { Button, Input } from "@nextui-org/react";
 import { useState } from "react";
+import axios from "axios";
 
 type MonsterRequestData = {
   "description": string,
@@ -13,24 +14,29 @@ type MonsterData = {}
 const Index = () => {
   const [monsterData, setMonsterData] = useState();
 
-  const getMonsterData = (monsterRequestData:MonsterRequestData):void => {
-    fetch("http://127.0.0.1:5000/monster", {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      mode: "no-cors",
-      method: "POST",
-      body: JSON.stringify(monsterRequestData),
+  const getMonsterData = (monsterRequestData: MonsterRequestData) => {
+    axios.post('http://127.0.0.1:5000/monster').then(resp => {
+      console.log(resp.data)
+    }).catch((error) => {
+      console.log(error)
     })
-      .then((response) => response.json())
-      .then((result) => {
-        console.log("Success:", result);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
   }
+
+  // const getMonsterData = (monsterRequestData:MonsterRequestData):void => {
+  //   fetch("http://127.0.0.1:5000/monster", {
+  //     headers: new Headers({'content-type': 'application/json', 'Access-Control-Allow-Origin': "*"}),
+  //     mode: "cors",
+  //     method: "POST",
+  //     body: JSON.stringify(monsterRequestData),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       console.log("Success:", result);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+  // }
 
   const generateMonsterData = () => {
     getMonsterData({
