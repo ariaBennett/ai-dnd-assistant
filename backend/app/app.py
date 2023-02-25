@@ -68,7 +68,7 @@ def create_image_prompt(value: str) -> str:
 
 
 def create_code_prompt(prompt):
-    return f"""{prompt}.
+    return f"""{prompt}
 
 Using JSON response data with this format:
 ```
@@ -87,9 +87,10 @@ def get_text(prompt):
     return choice.text.strip()
 
 
-def get_code(prompt):
+def get_code(prompt: str) -> str:
     openai_text_params = CODE_CONFIG.copy()
     code_prompt = create_code_prompt(prompt)
+    print("CODE_PROMPT", code_prompt)
     openai_text_params["prompt"] = code_prompt
 
     text_result = openai.Completion.create(**openai_text_params)
@@ -125,8 +126,9 @@ def completions() -> dict:
     print("PROMPT", prompt)
 
     attributes = ""
+    attributes = get_code(prompt)
+    print("ATTRIBUTES", attributes)
     image_data = ""
-
     image_data = get_image(prompt)
 
     return {"attributes": attributes, "image": image_data}
