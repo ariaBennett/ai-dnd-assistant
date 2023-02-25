@@ -22,11 +22,20 @@
     "CHA": ""
   },
   "details": {
+    "resistances": {
+      "damageResistances":"",
+      "conditionResistances":"",
+      "damageImmunities":"",
+      "conditionImmunities":""
+    },
     "skills": [
       ""
     ],
     "senses": [
-      ""
+      {
+        "senseTitle": "",
+        "senseValue": ""
+      }
     ],
     "languages": [
       ""
