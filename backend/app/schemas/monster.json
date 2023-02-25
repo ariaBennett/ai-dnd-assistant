@@ -1,14 +1,16 @@
 {
   "identity": {
-    "name": "",
-    "kind": "",
+    "personalName": "",
+    "creatureName": "",
+    "size": "",
+    "species": "",
     "alignment": ""
   },
   "attributes": {
     "armorClass": "",
     "armorClassType": "",
     "maxHitPoints": "",
-    "currentHitPoints": "",
+    "hitPointsDice": "",
     "speed": ""
   },
   "statBlock": {
