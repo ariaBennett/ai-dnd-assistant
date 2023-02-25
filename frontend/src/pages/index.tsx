@@ -4,6 +4,10 @@ import { useState } from "react";
 import axios from "axios";
 import styled from 'styled-components';
 
+const GenerateButton = styled(Button)`
+  margin: 20px 0;
+`;
+
 const MonsterStatBlock = styled.div`
   background: url(./img/stat-block-top-texture.png),url(./img/paper-texture.png);
   background-size: 100% auto;
@@ -156,8 +160,8 @@ const Index = () => {
 
   const getMonsterData = (monsterRequestData: MonsterRequestData) => {
     setIsLoading(true);
-    // axios.post('http://127.0.0.1:5000/monster', monsterRequestData).then(resp => {
-    axios.post(presetMonsterImage, monsterRequestData).then(resp => {
+    axios.post('http://127.0.0.1:5000/monster', monsterRequestData).then(resp => {
+    // axios.post(presetMonsterImage, monsterRequestData).then(resp => {
       console.log(resp.data)
       setMonsterData(presetMonsterData);
       setMonsterImage(presetMonsterImage);
@@ -212,9 +216,15 @@ const Index = () => {
         />
       </div>
 
-      <Button color="primary" auto ghost onClick={generateMonsterData}>
+      <GenerateButton color="primary" auto ghost onClick={generateMonsterData}>
           {isLoading ? <Loading type="points" color="currentColor" size="sm" /> : "Generate Monster"}
-      </Button>
+      </GenerateButton>
+
+      {isLoading && <Image
+        src="./img/spinner.gif"
+        alt="Default Image"
+        objectFit="cover"
+      /> }
       
       { monsterImage && <Image
         src={monsterImage}
