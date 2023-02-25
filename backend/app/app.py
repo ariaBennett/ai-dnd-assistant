@@ -8,18 +8,22 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from flask_restful import Api
 
-from .config import TEXT_CONFIG
+from .config import ART_STYLE, IMAGE_CONFIG, TEXT_CONFIG
 
 load_dotenv(".local.env", verbose=True)
 
 if not os.environ.get("OPENAI_API_KEY"):
     raise ValueError("Must set `OPENAI_API_KEY` in environment variables")
 
+
 app = Flask(__name__)
 api = Api(app)
 
 
-def parse_params(params):
+def parse_params(params: dict) -> dict:
+    """
+    Process the user inputs.
+    """
     description = params.get("description")
     location = params.get("location")
     level = params.get("level")
@@ -43,21 +47,48 @@ def parse_params(params):
 
 
 def create_prompt(params: dict) -> str:
-    return params["description"]
+    """
+    Convert user-based inputs to a single text prompt for OpenAI.
+    """
+    s = "s" if params["number_players"] > 1 else ""
+
+    return (
+        f'Monster for a D&D game based on description - {params["description"]}. The monsters lives at location {params["location"] }.'
+        f" Where the monster's D&D difficulty is suitable for"
+        f' {params["number_players"]} player{s} around level {params["level"]}.'
+    )
+
+
+def create_image_prompt(value: str) -> str:
+    return f"{ART_STYLE}. {value}"
 
 
 @app.route("/monster", methods=["POST"])
-def completions():
+def completions() -> dict:
     """
     Monster creation endpoint.
     """
     params = parse_params(request.json)
 
-    openai_text_params = TEXT_CONFIG.copy()
-    openai_text_params["prompt"] = create_prompt(params)
+    prompt = create_prompt(params)
+    print("PROMPT", prompt)
 
-    result = openai.Completion.create(**openai_text_params)
-    choice = result.choices[0]
+    # TEXT
+    openai_text_params = TEXT_CONFIG.copy()
+    openai_text_params["prompt"] = prompt
+
+    text_result = openai.Completion.create(**openai_text_params)
+    choice = text_result.choices[0]
     attributes = choice.text.strip()
 
-    return {"attributes": attributes, "image_url": ""}
+    # IMAGE
+    openai_image_params = IMAGE_CONFIG.copy()
+    image_prompt = create_image_prompt(prompt)
+    print("IMAGE PROMPT", image_prompt)
+    openai_image_params["prompt"] = image_prompt
+
+    image_result = openai.Image.create(**openai_image_params)
+    item = image_result["data"][0]
+    url = item["url"]
+
+    return {"attributes": attributes, "image_url": url}
