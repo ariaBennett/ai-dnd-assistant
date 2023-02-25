@@ -1,19 +1,8 @@
-import { Button, Col, Grid, Input, Row } from "@nextui-org/react";
+import { Button, Col, Grid, Input, Loading, Row } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
 import { useState } from "react";
 import axios from "axios";
 import styled from 'styled-components';
-
-const InputArea = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  >div {
-    width: 100%;
-
-  }
-`;
 
 const MonsterStatBlock = styled.div`
   background: url(./img/stat-block-top-texture.png),url(./img/paper-texture.png);
@@ -163,16 +152,21 @@ const titleDescriptionBlock = (title: string, description: string) => title && d
 const Index = () => {
   const [monsterData, setMonsterData] = useState();
   const [monsterImage, setMonsterImage] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const getMonsterData = (monsterRequestData: MonsterRequestData) => {
-    axios.post('http://127.0.0.1:5000/monster', monsterRequestData).then(resp => {
+    setIsLoading(true);
+    // axios.post('http://127.0.0.1:5000/monster', monsterRequestData).then(resp => {
+    axios.post(presetMonsterImage, monsterRequestData).then(resp => {
       console.log(resp.data)
       setMonsterData(presetMonsterData);
       setMonsterImage(presetMonsterImage);
+      setIsLoading(false);
     }).catch((error) => {
       console.log(error)
       setMonsterData(presetMonsterData);
       setMonsterImage(presetMonsterImage);
+      setIsLoading(false);
     })
   }
 
@@ -187,7 +181,6 @@ const Index = () => {
 
   return (
     <>
-      <InputArea>
       <div>
         <Input 
           underlined 
@@ -220,9 +213,8 @@ const Index = () => {
       </div>
 
       <Button color="primary" auto ghost onClick={generateMonsterData}>
-          Generate Monster
+          {isLoading ? <Loading type="points" color="currentColor" size="sm" /> : "Generate Monster"}
       </Button>
-      </InputArea>
       
       { monsterImage && <Image
         src={monsterImage}
