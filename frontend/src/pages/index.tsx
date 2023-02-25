@@ -163,12 +163,16 @@ const Index = () => {
     axios.post('http://127.0.0.1:5000/monster', monsterRequestData).then(resp => {
     // axios.post(presetMonsterImage, monsterRequestData).then(resp => {
       console.log(resp.data)
+      // @ts-ignore
       setMonsterData(presetMonsterData);
+      // @ts-ignore
       setMonsterImage(presetMonsterImage);
       setIsLoading(false);
     }).catch((error) => {
       console.log(error)
+      // @ts-ignore
       setMonsterData(presetMonsterData);
+      // @ts-ignore
       setMonsterImage(presetMonsterImage);
       setIsLoading(false);
     })
@@ -202,7 +206,7 @@ const Index = () => {
       </div>
         <Input 
           underlined 
-          labelLeft="username" 
+          labelLeft="player level" 
           placeholder="1" 
           type="number" 
         />
