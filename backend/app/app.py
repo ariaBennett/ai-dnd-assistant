@@ -7,6 +7,7 @@ import openai
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from flask_restful import Api
+from flask_cors import CORS
 
 from .config import ART_STYLE, CODE_CONFIG, IMAGE_CONFIG, MONSTER_SCHEMA, TEXT_CONFIG
 
@@ -17,6 +18,7 @@ if not os.environ.get("OPENAI_API_KEY"):
 
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 
 
