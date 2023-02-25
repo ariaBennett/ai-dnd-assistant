@@ -56,8 +56,8 @@ def create_prompt(params: dict) -> str:
     s = "s" if players > 1 else ""
 
     return (
-        f'Monster for a D&D game based on description - {params["description"]}. The monsters lives at location {params["location"] }.'
-        f" Where the monster's D&D difficulty is suitable for"
+        f'Monster for a D&D game based on description - {params["description"]}. The monster comes from location of {params["location"] }.'
+        f" The monster's D&D difficulty is suitable for"
         f' {params["number_players"]} player{s} around level {params["level"]}.'
     )
 
@@ -70,12 +70,14 @@ def create_image_prompt(value: str) -> str:
 
 
 def create_code_prompt(prompt):
+    # Use this for debugging to ignore all frontend data.
+    # prompt = "D&D cyclops monster"
+
     return f"""{prompt}
 
-Using JSON response data with this format:
-```
+Ignore making a request and no JavaScript or other code. Just return the monster's attributes as JSON using this schema:
+
 {MONSTER_SCHEMA}
-```
 """
 
 
@@ -131,6 +133,6 @@ def completions() -> dict:
     attributes = get_code(prompt)
     print("ATTRIBUTES", attributes)
     image_data = ""
-    image_data = get_image(prompt)
+    # image_data = get_image(prompt)
 
     return {"attributes": attributes, "image": image_data}

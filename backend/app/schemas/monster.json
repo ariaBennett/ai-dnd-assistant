@@ -5,45 +5,5 @@
     "size": "",
     "species": "",
     "alignment": ""
-  },
-  "attributes": {
-    "armorClass": "",
-    "armorClassType": "",
-    "maxHitPoints": "",
-    "hitPointsDice": "",
-    "speed": ""
-  },
-  "statBlock": {
-    "STR": "",
-    "DEX": "",
-    "CON": "",
-    "INT": "",
-    "WIS": "",
-    "CHA": ""
-  },
-  "details": {
-    "skills": [
-      ""
-    ],
-    "senses": [
-      ""
-    ],
-    "languages": [
-      ""
-    ],
-    "challenge": "",
-    "proficiencyBonus": ""
-  },
-  "passiveTraits": [
-    {
-      "name": "",
-      "description": ""
-    }
-  ],
-  "actions": [
-    {
-      "name": "",
-      "description": ""
-    }
-  ]
+  }
 }
