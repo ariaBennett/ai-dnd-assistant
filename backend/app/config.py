@@ -1,8 +1,8 @@
+TEXT_CONFIG = {"model": "text-ada-001", "max_tokens": 128, "temperature": 1}
+
 _CODE_HIGH_MODEL = "code-davinci-002"
 _CODE_LOW_MODEL = "code-cushman-001"
-CODE_CONFIG = {"model": _CODE_LOW_MODEL, "max_tokens": 2048}
-
-TEXT_CONFIG = {"model": "text-ada-001", "max_tokens": 128, "temperature": 1}
+CODE_CONFIG = {"model": _CODE_HIGH_MODEL, "max_tokens": 1024}
 
 _SMALL = "256x256"
 _MEDIUM = "512x512"
