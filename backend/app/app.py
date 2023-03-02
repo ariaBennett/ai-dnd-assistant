@@ -72,7 +72,7 @@ def create_image_prompt(value: str) -> str:
 def create_code_prompt(prompt):
     return f"""{prompt}
 
-Return the monster's attributes as YAML using this YAML schema:
+Return the monster's attributes as a JSON using this JSON schema:
 
 ```json
 {MONSTER_SCHEMA}
@@ -128,9 +128,11 @@ def completions() -> dict:
     prompt = create_prompt(params)
     print("PROMPT", prompt)
 
-    attributes = get_text(prompt)
-    # attributes = get_code(prompt)
+    # attributes = get_text(prompt)
+    attributes = get_code(prompt)
+    print(attributes)
 
-    image_data = get_image(prompt)
+    image_data = ""
+    # image_data = get_image(prompt)
 
     return {"attributes": attributes, "image": image_data}
