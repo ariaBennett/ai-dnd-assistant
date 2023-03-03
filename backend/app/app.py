@@ -1,6 +1,7 @@
 """
 App module.
 """
+import json
 import os
 
 import openai
@@ -74,9 +75,7 @@ def create_code_prompt(prompt):
 
 Return the monster's attributes as a JSON using this JSON schema:
 
-```json
 {MONSTER_SCHEMA}
-```
 """
 
 
@@ -94,15 +93,28 @@ def get_code(prompt: str) -> str:
     openai_text_params = CODE_CONFIG.copy()
     code_prompt = create_code_prompt(prompt)
     print("CODE_PROMPT", code_prompt)
-    openai_text_params["prompt"] = code_prompt
+    openai_text_params["messages"] = [dict(role="system", content=code_prompt)]
 
-    text_result = openai.Completion.create(**openai_text_params)
-    choice = text_result.choices[0]
+    code_result = openai.ChatCompletion.create(**openai_text_params)
+    choice = code_result.choices[0]
 
-    return choice.text.strip()
+    content: str = choice["message"]["content"]
+
+    try:
+        result = json.loads(content)
+    except Exception as e:
+        result = dict(
+            error=f"Unable to parse response data as an object. {str(e)}",
+            result_text=content,
+        )
+
+    return result
 
 
 def get_image(prompt):
+    """
+    Request OpenAI image endpoint and return binary image data as base64-encoded text.
+    """
     openai_image_params = IMAGE_CONFIG.copy()
     image_prompt = create_image_prompt(prompt)
     print("IMAGE PROMPT", image_prompt)
@@ -128,11 +140,8 @@ def completions() -> dict:
     prompt = create_prompt(params)
     print("PROMPT", prompt)
 
-    # attributes = get_text(prompt)
     attributes = get_code(prompt)
-    print(attributes)
-
     image_data = ""
-    # image_data = get_image(prompt)
+    image_data = get_image(prompt)
 
     return {"attributes": attributes, "image": image_data}
