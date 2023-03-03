@@ -1,6 +1,6 @@
 TEXT_CONFIG = {"model": "text-curie-001", "max_tokens": 500, "temperature": 1}
 
-_CODE_HIGH_MODEL = "code-davinci-002"
+_CODE_HIGH_MODEL = "gpt-3.5-turbo"
 _CODE_LOW_MODEL = "code-cushman-001"
 CODE_CONFIG = {"model": _CODE_HIGH_MODEL, "max_tokens": 1024}
 
