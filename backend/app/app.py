@@ -57,7 +57,8 @@ def create_prompt(params: dict) -> str:
     s = "s" if players > 1 else ""
 
     return (
-        f'Monster for a D&D game based on description - {params["description"]}. The monster comes from location of {params["location"] }.'
+        f'Monster for a D&D game based on description - {params["description"]}.'
+        f' The monster comes from location of {params["location"] }.'
         f" The monster's D&D difficulty is suitable for"
         f' {params["number_players"]} player{s} around level {params["level"]}.'
     )
